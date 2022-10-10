@@ -6,16 +6,36 @@ app.get('/', (req, res) => {
   res.send('Hola mi server en express');
 });
 
-app.get('/nueva-ruta', (req, res) => {
-  res.send('Soy una nueva ruta');
+app.get('/products', (req, res) => {
+  res.json([
+    {
+      name: 'Product 1',
+      price: 1000
+    },
+    {
+      name: 'Product 2',
+      price: 2000
+    }
+  ]);
 });
 
-app.get('/products', (req, res) => {
-  res.json({
+app.get('/products/:id', (req, res) => {
+  const { id } = req.params;
+  res.json([{
+    id,
     name: 'Product 1',
     price: 1000
-  })
-});
+  }]);
+})
+
+app.get('/categories/:categoryID/products/:productId', (req, res) => {
+  const { categoryID, productId } = req.params;
+  res.json([{
+    categoryID,
+    productId
+  }]);
+})
+
 
 app.listen(port, () => {
   console.log("Mi port " + port);
