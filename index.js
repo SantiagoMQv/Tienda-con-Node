@@ -2,7 +2,7 @@ const express = require('express');
 const routerApi = require('./routes');
 
 // Importar middleware
-const {logErrors, errorHandler} = require('./middleware/error_handler')
+const {logErrors, errorHandler, boomErrorHandler} = require('./middleware/error_handler')
 
 const app = express();
 const port = 3000;
@@ -24,6 +24,7 @@ routerApi(app);
 // De esta manera la app sabe que debe usar esos middlewares
 // El orden en el que se declare la función "use" dicta el orden de ejecución de los middleware
 app.use(logErrors);
+app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {

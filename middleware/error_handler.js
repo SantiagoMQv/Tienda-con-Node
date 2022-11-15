@@ -16,4 +16,16 @@ function errorHandler(err, req, res, next){
   });
 }
 
-module.exports = { logErrors, errorHandler }
+// Como usamos el módulo "boom" es necesario crear un middleware que gestione el estandar
+// de formato para cuando haya un error que  se controle con boom
+function boomErrorHandler(err, req, res, next){
+  if(err.isBoom){
+    const { output } = err;
+    res.status(output.statusCode).json(output.payload);
+  }
+
+  // Si no es de tipo "boom", se activará el middleware "errorHandler"
+  next(err);
+}
+
+module.exports = { logErrors, errorHandler, boomErrorHandler }
