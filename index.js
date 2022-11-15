@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const routerApi = require('./routes');
 
 // Importar middleware
@@ -8,6 +9,20 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+
+const whitelist = ['http://localhost:5500', 'https://myapp.es'];
+
+// Sirve para verificar si el origen que quiere acceder a la API está en la whitelist
+const options = {
+  origin: (origin, callback) => {
+    if(whitelist.includes(origin)){
+      callback(null, true);
+    }else{
+      callback(new Error("No se tiene permiso"));
+    }
+  }
+}
+app.use(cors(options));
 
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
@@ -28,5 +43,5 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log('Mi port' +  port);
+  console.log('Mi port ' +  port);
 });
